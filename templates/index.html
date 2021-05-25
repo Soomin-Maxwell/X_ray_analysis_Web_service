@@ -1,0 +1,70 @@
+{% extends "base.html" %} 
+{% block content %}
+
+<center>
+<h2>Upload Image</h2><br>
+<section class="upload">
+    <div>
+        <div class="img-preview">
+            <p><img id="output" width="400" /></p>
+        </div>
+        <div>
+            <form id = "upload"  action="/" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="file" id="image" name="image" onchange="loadFile(event)">
+                </div>
+                <div class="form-group">
+                    <button type="submit" id = 'predict' class="btn btn-primary" style="display: none;">Analyze</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section class="Predictions">
+        <div>
+            {% if predictions %}
+            <h2>Cardiomegaly: {{predictions.Cardiomegaly}}</h2>
+            <h2>Emphysema: {{predictions.Emphysema}}</h2>
+            <h2>Effusion: {{predictions.Effusion}}</h2>
+            <h2>Hernia: {{predictions.Hernia}}</h2>
+            <h2>Infiltration: {{predictions.Infiltration}}</h2>
+            <h2>Mass: {{predictions.Mass}}</h2>
+            <h2>Nodule: {{predictions.Nodule}}</h2>
+            <h2>Atelectasis: {{predictions.Atelectasis}}</h2>
+            <h2>Pneumothorax: {{predictions.Pneumothorax}}</h2>
+            <h2>Pneumonia: {{predictions.Pneumonia}}</h2>
+            <h2>Fibrosis: {{predictions.Fibrosis}}</h2>
+            <h2>Edema: {{predictions.Edema}}</h2>
+            <h2>Consolidation: {{predictions.Consolidation}}</h2>
+            {% endif %}
+        </div>
+</section>
+<script>
+    // load image from local strorage
+    window.onload = function() {
+        let profileImage = localStorage.getItem("profileImageData");
+        if (profileImage !== null) {
+                document.getElementById("output").src = profileImage
+            }
+    }
+
+    // preview loaded image
+    const loadFile = function(event) {
+        document.getElementById('predict').style.display = 'block'
+        let image = document.getElementById('output');
+        image.src = URL.createObjectURL(event.target.files[0]);
+    };
+
+    // save loaded image to local storage
+    document.getElementById("image").addEventListener('change', function() {
+        var file = this.files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            localStorage.setItem("profileImageData", reader.result);
+        };
+    } );
+</script>
+</center><br><br>
+{% endblock %}
